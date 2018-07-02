@@ -8,30 +8,24 @@ class LifeChoiceMaker():
         pass
 
     def input_plan(self, available_hours, plan_names_list=[], end_flag=False):
-        # if saved_plan_names_str.strip() != "":
-        #     print "已保存的活动有:%s" % saved_plan_names_str
-        # else:
-        #     print "没有已保存的活动"
-        # using_saved_plan_names = str(raw_input('是否使用已保存的活动?'))
         input_plan_names_str = str(raw_input('请输入活动名称:'))
-        # if using_saved_plan_names.lower() in "yes":
-        #     input_plan_names_str = "%s,%s" % (input_plan_names_str, saved_plan_names_str)
         if str(input_plan_names_str).strip() == "":
             print "输入为空!"
         else:
             this_plan_names_list = input_plan_names_str.split(',')
             for plan_name in this_plan_names_list:
                 plan_names_list.append(plan_name)
+            print '现在的活动列表:%s' % plan_names_list
         if available_hours > len(this_plan_names_list):
             left_hours = int(available_hours) - len(this_plan_names_list)
-            print len(this_plan_names_list)
             print '最少还需要输入%s项活动' % left_hours
-            plan_names_list, end_flag = self.input_plan(left_hours, this_plan_names_list)
+            plan_names_list, end_flag = self.input_plan(left_hours, plan_names_list)
         else:
             end_input = str(raw_input('是否结束活动名称输入？'))
-            if end_input.lower() in 'yes':
+            if end_input.lower() == 'yes' or end_input.lower() == 'y':
                 end_flag = True
-
+            else:
+                plan_names_list, end_flag = self.input_plan(0, plan_names_list)
         return plan_names_list, end_flag
 
     def random_pick_plans(self, availalbe_hours, plan_names_list):
@@ -66,8 +60,6 @@ if __name__ == '__main__':
     availalbe_hours = int(raw_input('请输入可用小时数:'))
     my_choice_maker_instance = LifeChoiceMaker()
     # saved_plan_names_str = my_choice_maker_instance.load_plans_from_text()
-    end_flag = False
-    while (not end_flag):
-        plan_names_list, end_flag = my_choice_maker_instance.input_plan(availalbe_hours)
+    plan_names_list, end_flag = my_choice_maker_instance.input_plan(availalbe_hours)
     distinct_plan_names_list = list(set(plan_names_list))
     my_choice_maker_instance.random_pick_plans(availalbe_hours, distinct_plan_names_list)
