@@ -1,4 +1,4 @@
-# -*- coding:utf-8 -*-
+# -*- coding=gbk -*-
 import random
 import os
 
@@ -8,20 +8,27 @@ class LifeChoiceMaker():
         pass
 
     def input_plan(self, available_hours, plan_names_list=[], end_flag=False):
-        input_plan_names_str = str(raw_input('è¯·è¾“å…¥æ´»åŠ¨åç§°:'))
+        input_plan_names_str = str(raw_input('ÇëÊäÈë»î¶¯Ãû³Æ:'))
         if str(input_plan_names_str).strip() == "":
-            print "è¾“å…¥ä¸ºç©º!"
+            print 'ÊäÈëÎª¿Õ!'
         else:
             this_plan_names_list = input_plan_names_str.split(',')
             for plan_name in this_plan_names_list:
                 plan_names_list.append(plan_name)
-            print 'ç°åœ¨çš„æ´»åŠ¨åˆ—è¡¨:%s' % plan_names_list
+            print 'ÏÖÔÚµÄ»î¶¯ÁĞ±í:'
+            for index, show_plan_name in enumerate(plan_names_list):
+                if index == 0:
+                    print "[ %s," % show_plan_name,
+                elif index == plan_names_list.index(plan_names_list[-1]):
+                    print "%s ]" % show_plan_name
+                else:
+                    print "%s," % show_plan_name,
         if available_hours > len(this_plan_names_list):
             left_hours = int(available_hours) - len(this_plan_names_list)
-            print 'æœ€å°‘è¿˜éœ€è¦è¾“å…¥%sé¡¹æ´»åŠ¨' % left_hours
+            print '×îÉÙ»¹ĞèÒªÊäÈë%sÏî»î¶¯' % left_hours
             plan_names_list, end_flag = self.input_plan(left_hours, plan_names_list)
         else:
-            end_input = str(raw_input('æ˜¯å¦ç»“æŸæ´»åŠ¨åç§°è¾“å…¥ï¼Ÿ'))
+            end_input = str(raw_input('ÊÇ·ñ½áÊø»î¶¯Ãû³ÆÊäÈë£¿'))
             if end_input.lower() == 'yes' or end_input.lower() == 'y':
                 end_flag = True
             else:
@@ -29,11 +36,11 @@ class LifeChoiceMaker():
         return plan_names_list, end_flag
 
     def random_pick_plans(self, availalbe_hours, plan_names_list):
-        print 'å†³å®šæ˜¯ä½ äº†!'
+        print '¾ö¶¨ÊÇÄãÁË!'
         picked_plan_names_list = []
         for elect_turn in range(0, availalbe_hours):
             elected_plan_num = random.randint(1, len(plan_names_list))
-            print plan_names_list[elected_plan_num - 1]
+            print "%s. %s" % (elect_turn, plan_names_list[elected_plan_num - 1])
             picked_plan_names_list.append(plan_names_list[elected_plan_num - 1])
             plan_names_list.pop(elected_plan_num - 1)
         return picked_plan_names_list
@@ -57,9 +64,10 @@ class LifeChoiceMaker():
 
 
 if __name__ == '__main__':
-    availalbe_hours = int(raw_input('è¯·è¾“å…¥å¯ç”¨å°æ—¶æ•°:'))
+    availalbe_hours = int(raw_input('ÇëÊäÈë¿ÉÓÃĞ¡Ê±Êı:'))
     my_choice_maker_instance = LifeChoiceMaker()
     # saved_plan_names_str = my_choice_maker_instance.load_plans_from_text()
     plan_names_list, end_flag = my_choice_maker_instance.input_plan(availalbe_hours)
     distinct_plan_names_list = list(set(plan_names_list))
     my_choice_maker_instance.random_pick_plans(availalbe_hours, distinct_plan_names_list)
+    raw_input('\n°´ÈÎÒâ¼üÍË³ö')
